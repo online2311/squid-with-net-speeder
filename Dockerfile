@@ -28,6 +28,7 @@ COPY entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/net_speeder
 
+VOLUME ["/etc/squid3"]
 EXPOSE 3128
 
 # Configure container to run as an executable
