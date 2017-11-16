@@ -9,7 +9,7 @@ ENV SQUID_VERSION=3.3.8 \
 RUN apt-get update \
 	&&  apt-get install libnet1 libpcap0.8 \
 	&&  apt-get install -y libnet1-dev libpcap0.8-dev git \
-	&&  apt-get clean \
+	&&  apt-get clean
 
 RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 80F70E11F0F0D5F10CB20E62F5DA5F09C3173AA6 \
  && echo "deb http://ppa.launchpad.net/brightbox/squid-ssl/ubuntu trusty main" >> /etc/apt/sources.list \
