@@ -12,8 +12,7 @@ RUN apt-get update && \
 	apt-get clean  && \
     mv /etc/squid3/squid.conf /etc/squid3/squid.conf.dist && \
     apt-get clean
-		
-VOLUME ["/etc/squid3"]
+
 ADD squid.conf /etc/squid3/squid.conf
 RUN mkdir /var/cache/squid3
 RUN chown -R proxy:proxy /var/cache/squid3
