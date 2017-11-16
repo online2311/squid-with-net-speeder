@@ -23,8 +23,7 @@ COPY radius_config /etc/radius_config
 COPY entrypoint.sh /sbin/entrypoint.sh
 RUN chmod 755 /sbin/entrypoint.sh
 RUN mkdir /usr/etc/
-RUN echo "189csp:$apr1$.1Ih5U6B$SBcZlM/G3lNp2UGBDaoBi1" >> /usr/etc/passwd
-
+RUN htpasswd -c -b /usr/etc/passwd 189csp Hello189
 RUN git clone https://github.com/snooda/net-speeder.git net-speeder
 WORKDIR net-speeder
 RUN sh build.sh
