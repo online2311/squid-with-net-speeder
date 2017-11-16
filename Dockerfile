@@ -7,7 +7,7 @@ ENV SQUID_VERSION=3.3.8 \
     SQUID_USER=proxy
 
 RUN apt-get update \
-	&&  apt-get install libnet1 libpcap0.8 \
+	&&  apt-get install libnet1 libpcap0.8 apache2-utils \
 	&&  apt-get install -y libnet1-dev libpcap0.8-dev git \
 	&&  apt-get clean
 
@@ -22,6 +22,8 @@ COPY squid.conf /etc/squid3/squid.conf
 COPY radius_config /etc/radius_config
 COPY entrypoint.sh /sbin/entrypoint.sh
 RUN chmod 755 /sbin/entrypoint.sh
+RUN mkdir /usr/etc/
+RUN echo "189csp:$apr1$.1Ih5U6B$SBcZlM/G3lNp2UGBDaoBi1" >> /usr/etc/passwd
 
 RUN git clone https://github.com/snooda/net-speeder.git net-speeder
 WORKDIR net-speeder
@@ -33,5 +35,5 @@ RUN chmod +x /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/net_speeder
 
 EXPOSE 1080/tcp
-VOLUME ["${SQUID_CACHE_DIR}","/etc/squid3"]
+VOLUME ["${SQUID_CACHE_DIR}"]
 ENTRYPOINT ["/sbin/entrypoint.sh"]
