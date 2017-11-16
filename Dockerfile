@@ -9,7 +9,7 @@ ENV SQUID_VERSION=3.3.8 \
 RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 80F70E11F0F0D5F10CB20E62F5DA5F09C3173AA6 \
  && echo "deb http://ppa.launchpad.net/brightbox/squid-ssl/ubuntu trusty main" >> /etc/apt/sources.list \
  && apt-get update \
- && DEBIAN_FRONTEND=noninteractive apt-get install -y squid3-ssl=${SQUID_VERSION}* \
+ && DEBIAN_FRONTEND=noninteractive apt-get install -y git squid3-ssl=${SQUID_VERSION}* \
  && mv /etc/squid3/squid.conf /etc/squid3/squid.conf.dist \
  && rm -rf /var/lib/apt/lists/*
 
@@ -26,6 +26,6 @@ COPY entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/net_speeder
 
-EXPOSE 3128/tcp
+EXPOSE 1080/tcp
 VOLUME ["${SQUID_CACHE_DIR}","/etc/squid3"]
 ENTRYPOINT ["/sbin/entrypoint.sh"]
