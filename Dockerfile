@@ -17,6 +17,15 @@ COPY squid.conf /etc/squid3/squid.conf
 COPY entrypoint.sh /sbin/entrypoint.sh
 RUN chmod 755 /sbin/entrypoint.sh
 
+RUN git clone https://github.com/snooda/net-speeder.git net-speeder
+WORKDIR net-speeder
+RUN sh build.sh
+
+RUN mv net_speeder /usr/local/bin/
+COPY entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/net_speeder
+
 EXPOSE 3128/tcp
-VOLUME ["${SQUID_CACHE_DIR}"]
+VOLUME ["${SQUID_CACHE_DIR}","/etc/squid3"]
 ENTRYPOINT ["/sbin/entrypoint.sh"]
