@@ -1,35 +1,22 @@
-# squid-net-speeder
-
 FROM ubuntu:14.04.3
-MAINTAINER malaohu <tua@live.cn>
-RUN apt-get update && \
-	apt-get clean  && \
-	apt-get install libnet1 libpcap0.8  && \
-	apt-get clean  && \
-	apt-get install -y libnet1-dev libpcap0.8-dev && \
-	apt-get clean  && \
-    apt-get install -y git squid3 && \
-	apt-get clean  && \
-    mv /etc/squid3/squid.conf /etc/squid3/squid.conf.dist && \
-    apt-get clean
+MAINTAINER zhangjing@189csp.com
 
-ADD squid.conf /etc/squid3/squid.conf
-RUN mkdir /var/cache/squid3
-RUN chown -R proxy:proxy /var/cache/squid3
-RUN /usr/sbin/squid3 -N -z -F
+ENV SQUID_VERSION=3.3.8 \
+    SQUID_CACHE_DIR=/var/cache/squid3 \
+    SQUID_LOG_DIR=/var/log/squid3 \
+    SQUID_USER=proxy
 
+RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 80F70E11F0F0D5F10CB20E62F5DA5F09C3173AA6 \
+ && echo "deb http://ppa.launchpad.net/brightbox/squid-ssl/ubuntu trusty main" >> /etc/apt/sources.list \
+ && apt-get update \
+ && DEBIAN_FRONTEND=noninteractive apt-get install -y squid3-ssl=${SQUID_VERSION}* \
+ && mv /etc/squid3/squid.conf /etc/squid3/squid.conf.dist \
+ && rm -rf /var/lib/apt/lists/*
 
-RUN git clone https://github.com/snooda/net-speeder.git net-speeder
-WORKDIR net-speeder
-RUN sh build.sh
+COPY squid.conf /etc/squid3/squid.conf
+COPY entrypoint.sh /sbin/entrypoint.sh
+RUN chmod 755 /sbin/entrypoint.sh
 
-RUN mv net_speeder /usr/local/bin/
-COPY entrypoint.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/entrypoint.sh
-RUN chmod +x /usr/local/bin/net_speeder
-
-
-EXPOSE 3128
-
-# Configure container to run as an executable
-ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+EXPOSE 3128/tcp
+VOLUME ["${SQUID_CACHE_DIR}"]
+ENTRYPOINT ["/sbin/entrypoint.sh"]
