@@ -2,7 +2,7 @@ FROM ubuntu:14.04.3
 MAINTAINER zhangjing@189csp.com
 
 ENV SQUID_VERSION=3.3.8 \
-    SQUID_CACHE_DIR=/var/cache/squid3 \
+    SQUID_CACHE_DIR=/var/spool/squid3 \
     SQUID_LOG_DIR=/var/log/squid3 \
     SQUID_USER=proxy
 
