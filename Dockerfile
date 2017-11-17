@@ -34,5 +34,5 @@ RUN chmod +x /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/net_speeder
 
 EXPOSE 1080/tcp
-VOLUME ["${SQUID_CACHE_DIR}"]
+VOLUME ["${SQUID_CACHE_DIR}","/usr/etc/passwd"]
 ENTRYPOINT ["/sbin/entrypoint.sh"]
